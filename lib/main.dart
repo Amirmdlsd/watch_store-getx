@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:watch_store_getx/feature/feature_authentication/screen/send_sms_screen.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/home_screen.dart';
+import 'package:watch_store_getx/feature/feature_home/screen/main_screen.dart';
 import 'package:watch_store_getx/route/route.dart';
 
 void main() {
@@ -20,9 +21,21 @@ class MyApp extends StatelessWidget {
       getPages: getPage,
       title: 'Flutter Demo',
       theme: ThemeData(
-        fontFamily: 'dana'
+        textTheme: TextTheme(
+            displayMedium:
+                const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            labelMedium:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            bodyMedium: const TextStyle(
+                fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+            titleSmall: TextStyle(
+                fontSize: 15,
+                decoration: TextDecoration.lineThrough,
+                decorationColor: Colors.grey.shade400,
+                decorationThickness: 2,
+                color: Colors.grey)),
       ),
-      home: HomeScreen(),
+      home: MainScreen(),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:watch_store_getx/config/widget/loading_widget.dart';
 import 'package:watch_store_getx/config/widget/search_bar.dart';
 import 'package:watch_store_getx/feature/feature_home/widget/category_list_view.dart';
 import 'package:watch_store_getx/feature/feature_home/widget/home_product_list_view.dart';
+import 'package:watch_store_getx/feature/utils/auth_manager.dart';
 
 import '../controller/home_controller.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Bearer ${AuthManager.readToken()}');
     return Scaffold(
       body: SafeArea(
         child: Obx(

@@ -4,7 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:watch_store_getx/feature/feature_basket/screen/basket_scren.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/home_screen.dart';
+import 'package:watch_store_getx/feature/feature_profile/screen/profile_screen.dart';
 import 'package:watch_store_getx/gen/assets.gen.dart';
 
 import '../../utils/auth_manager.dart';
@@ -23,7 +25,7 @@ class MainScreen extends StatelessWidget {
             child: Obx(
               ()=> IndexedStack(
                         index: currentIndex.value,
-                        children: [HomeScreen()],
+                        children: [HomeScreen(),BasketScreen(),ProfileScreen()],
                       ),
             )),
         bottomNavigationBar: Obx(

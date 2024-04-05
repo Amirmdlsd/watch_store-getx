@@ -8,10 +8,10 @@ class AuthManager {
   }
 
   static String readToken() {
-    return GetStorage().read('token') ?? "";
+    return box.read('token') ?? "";
   }
 
   static void removeToken() {
-    GetStorage().remove('token');
+    box.remove('token');
   }
 }

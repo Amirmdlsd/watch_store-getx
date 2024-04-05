@@ -17,8 +17,8 @@ class ProductDetailController extends GetxController {
     try {
       loading.value = true;
       Get.toNamed(NamedClass.singleProductDetail);
-      var response = await DioProvider.getMethod(
-          EndPoints.productDetailEndPoint + id.toString());
+      var response = await DioProvider()
+          .getMethod(EndPoints.productDetailEndPoint + id.toString());
       debugPrint(response.data['data'][0].toString());
 
       productDetaill.value =

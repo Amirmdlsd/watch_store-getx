@@ -1,12 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:watch_store_getx/config/constant/color.dart';
 import 'package:watch_store_getx/config/constant/dimens.dart';
+import 'package:watch_store_getx/config/constant/string.dart';
 import 'package:watch_store_getx/config/extension/sized_box_extension.dart';
 import 'package:watch_store_getx/config/widget/cached_image.dart';
+import 'package:watch_store_getx/config/widget/loading_widget.dart';
 import 'package:watch_store_getx/config/widget/main_button.dart';
+import 'package:watch_store_getx/feature/feature_basket/controller/basket_controller.dart';
 import 'package:watch_store_getx/feature/feature_product_detail/controller/product_detail_controller.dart';
 
 import '../../../config/widget/discount_container_widget.dart';
@@ -32,6 +36,7 @@ class _SingleProductDetailScreenState extends State<SingleProductDetailScreen>
   }
 
   final ProductDetailController controller = Get.put(ProductDetailController());
+  final basketController = Get.put(BasketController());
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +118,8 @@ class _SingleProductDetailScreenState extends State<SingleProductDetailScreen>
                               itemCount: controller
                                   .productDetaill.value.properties!.length,
                               itemBuilder: (context, index) => Container(
-                                margin: EdgeInsets.all(8),
-                                padding: EdgeInsets.all(8),
+                                margin: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: Colors.grey.shade400),
@@ -144,8 +149,8 @@ class _SingleProductDetailScreenState extends State<SingleProductDetailScreen>
                               itemCount: controller
                                   .productDetaill.value.comments!.length,
                               itemBuilder: (context, index) => Container(
-                                margin: EdgeInsets.all(8),
-                                padding: EdgeInsets.all(8),
+                                margin: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 child: Row(
                                   children: [
                                     Image.asset(Assets.png.avatar.path),
@@ -193,16 +198,25 @@ class _SingleProductDetailScreenState extends State<SingleProductDetailScreen>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                          SizedBox(
+                            basketController.loadingForCount.value
+                                ? SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .5,
+                                    child: const Center(child: LoadingWidget()))
+                                : SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width * .5,
                                     height: 50,
                                     child: MainElevatedButton(
                                         bgColor: Colors.red,
-                                        fontSize: 15,
-                                        lable: "ادامه فرآیند خرید",
+                                        fontSize: 13,
+                                        lable: AppStrings.addToBasket,
                                         onTap: () {
-
+                                          debugPrint(
+                                              'id is ${controller.productDetaill.value.id}');
+                                          basketController.addToBasket(
+                                              controller
+                                                  .productDetaill.value.id!);
                                         })),
                             //discount container
                             Visibility(

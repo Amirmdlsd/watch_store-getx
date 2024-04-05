@@ -45,11 +45,7 @@ class _ProductItemState extends State<ProductItem> {
     String productTime = widget.product.specialExpiration!;
     Duration dif = time.difference(DateTime.parse(productTime)).abs();
     timeInSeconds.value = dif.inSeconds;
-    debugPrint('time in sec : ${dif.inSeconds.remainder(60)}');
-    debugPrint('time in min : ${dif.inMinutes.remainder(60)}');
-    debugPrint('time in hour : ${dif.inHours.remainder(24)}');
-    debugPrint('time : ${timeInSeconds.value}');
-    // TODO: implement initState
+
     super.initState();
     startTimer();
   }

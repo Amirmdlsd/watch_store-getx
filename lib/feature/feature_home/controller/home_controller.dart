@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   Future<dynamic> getHomeData() async {
     try {
       isLoading.value = true;
-      var response = await DioProvider.getMethod(
+      var response = await DioProvider().getMethod(
           EndPoints.homeEndPoint);
 
       if (response.statusCode == 200) {

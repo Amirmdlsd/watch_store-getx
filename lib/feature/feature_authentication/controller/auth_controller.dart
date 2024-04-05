@@ -21,7 +21,7 @@ class AuthController extends GetxController {
   Future<bool> sendSms() async {
     try {
       loading.value = true;
-      var response = await DioProvider.postMethod(
+      var response = await DioProvider().postMethod(
           {'mobile': mobileController.text}, EndPoints.sendSmsEndPoint);
       debugPrint(response.data['data']['code'].toString());
       CustomSnackBar.showSnackBar(response.data['data']['code'].toString());
@@ -44,14 +44,14 @@ class AuthController extends GetxController {
   Future<void> getOtpCode() async {
     try {
       loadingForCode.value = true;
-      var response = await DioProvider.postMethod({
+      var response = await DioProvider().postMethod({
         'mobile': mobileController.text,
         'code': verificationCodeContoller.text
       }, EndPoints.checkSmsEndPoint);
       loadingForCode.value = false;
       AuthManager.saveToken(response.data['data']['token']);
       if (response.data['data']['is_registered']) {
-        Get.offAndToNamed(NamedClass.homeScreen);
+        Get.offAndToNamed(NamedClass.mainScreen);
       } else {
         debugPrint('register');
       }

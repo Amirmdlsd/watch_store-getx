@@ -3,15 +3,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:watch_store_getx/feature/utils/auth_manager.dart';
 
 class DioProvider {
-  static final Dio dio = Dio();
-static dynamic getMethod(String url){
-  return dio.get(url);
-}
-  static dynamic postMethod(Map<String, dynamic> map, String url) {
-    if(AuthManager.readToken().isNotEmpty){
+  DioProvider._();
+
+  static final DioProvider _instance = DioProvider._();
+
+  factory DioProvider() {
+    return _instance;
+  }
+
+  final Dio _dio = Dio();
+
+  Dio get dio => _dio;
+
+  dynamic getMethod(String url) {
+    return _dio.get(url);
+  }
+
+  dynamic postMethod(Map<String, dynamic> map, String url) {
+    String token = AuthManager.readToken();
+    if (token.isNotEmpty) {
       debugPrint(AuthManager.readToken().toString());
-      dio.options.headers['Authorization']='Bearer ${AuthManager.readToken()}';
+      _dio.options.headers['Authorization'] = 'Bearer $token';
     }
-    return dio.post(url, data: FormData.fromMap(map));
+    return _dio.post(url, data: FormData.fromMap(map));
   }
 }

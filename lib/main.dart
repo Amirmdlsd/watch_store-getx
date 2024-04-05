@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:watch_store_getx/feature/feature_authentication/screen/send_sms_screen.dart';
+import 'package:watch_store_getx/feature/feature_basket/screen/basket_scren.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/home_screen.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/main_screen.dart';
 import 'package:watch_store_getx/route/route.dart';
 
-void main() {
+void main()async {
+ await GetStorage.init();
   runApp(const MyApp());
 }
 

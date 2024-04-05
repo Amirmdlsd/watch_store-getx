@@ -144,40 +144,22 @@ class _SingleProductDetailScreenState extends State<SingleProductDetailScreen>
                                   ?.copyWith(fontSize: 17),
                             )),
                             //comments
-
-                            ListView.builder(
-                              itemCount: controller
-                                  .productDetaill.value.comments!.length,
-                              itemBuilder: (context, index) => Container(
-                                margin: const EdgeInsets.all(8),
-                                padding: const EdgeInsets.all(8),
-                                child: Row(
-                                  children: [
-                                    Image.asset(Assets.png.avatar.path),
-                                    AppDimens.medium.width,
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            controller.productDetaill.value
-                                                .comments![index].user!,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displayMedium),
-                                        AppDimens.medium.height,
-                                        Text(
-                                            controller.productDetaill.value
-                                                .comments![index].body!,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displayMedium),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
+                            controller.productDetaill.value.comments!.isEmpty
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                          Icons.comments_disabled_outlined,
+                                          size: 50),
+                                      AppDimens.medium.height,
+                                      const Text(
+                                        'هیچ کامنتی برای محصول وجودندارد',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 18),
+                                      )
+                                    ],
+                                  )
+                                : CommentListView(controller: controller)
                           ],
                         ),
                       ),
@@ -189,71 +171,114 @@ class _SingleProductDetailScreenState extends State<SingleProductDetailScreen>
                       bottom: 0,
                       right: 0,
                       left: 0,
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * .01),
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * .1,
-                        color: Colors.white,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            basketController.loadingForCount.value
-                                ? SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * .5,
-                                    child: const Center(child: LoadingWidget()))
-                                : SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * .5,
-                                    height: 50,
-                                    child: MainElevatedButton(
-                                        bgColor: Colors.red,
-                                        fontSize: 13,
-                                        lable: AppStrings.addToBasket,
-                                        onTap: () {
-                                          debugPrint(
-                                              'id is ${controller.productDetaill.value.id}');
-                                          basketController.addToBasket(
-                                              controller
-                                                  .productDetaill.value.id!);
-                                        })),
-                            //discount container
-                            Visibility(
-                                visible:
-                                    controller.productDetaill.value.discount! >
-                                        0,
-                                child: DiscountContainerWidget(
-                                    title:
-                                        '${controller.productDetaill.value.discount}')),
-                            AppDimens.small.width,
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    '${controller.productDetaill.value.discountPrice} تومان',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displayMedium
-                                        ?.copyWith(fontSize: 17)),
-                                Visibility(
-                                    visible: controller
-                                            .productDetaill.value.discount! >
-                                        0,
-                                    child: Text(
-                                        '${controller.productDetaill.value.price}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall))
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
+                      child: ProductDetailPriceContainer(
+                          basketController: basketController,
+                          controller: controller)),
                 ],
               ),
       )),
+    );
+  }
+}
+
+class ProductDetailPriceContainer extends StatelessWidget {
+  const ProductDetailPriceContainer({
+    super.key,
+    required this.basketController,
+    required this.controller,
+  });
+
+  final BasketController basketController;
+  final ProductDetailController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+        ()=> Container(
+        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * .01),
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height * .1,
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            basketController.loading.value
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width * .5,
+                    child: const Center(child: LoadingWidget()))
+                : SizedBox(
+                    width: MediaQuery.of(context).size.width * .5,
+                    height: 50,
+                    child: MainElevatedButton(
+                        bgColor: Colors.red,
+                        fontSize: 13,
+                        lable: AppStrings.addToBasket,
+                        onTap: () {
+                          debugPrint(
+                              'id is ${controller.productDetaill.value.id}');
+                          basketController
+                              .addToBasket(controller.productDetaill.value.id!);
+                        })),
+            //discount container
+            Visibility(
+                visible: controller.productDetaill.value.discount! > 0,
+                child: DiscountContainerWidget(
+                    title: '${controller.productDetaill.value.discount}')),
+            AppDimens.small.width,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${controller.productDetaill.value.discountPrice} تومان',
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMedium
+                        ?.copyWith(fontSize: 17)),
+                Visibility(
+                    visible: controller.productDetaill.value.discount! > 0,
+                    child: Text('${controller.productDetaill.value.price}',
+                        style: Theme.of(context).textTheme.titleSmall))
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CommentListView extends StatelessWidget {
+  const CommentListView({
+    super.key,
+    required this.controller,
+  });
+
+  final ProductDetailController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: controller.productDetaill.value.comments!.length,
+      itemBuilder: (context, index) => Container(
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Image.asset(Assets.png.avatar.path),
+            AppDimens.medium.width,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(controller.productDetaill.value.comments![index].user!,
+                    style: Theme.of(context).textTheme.displayMedium),
+                AppDimens.medium.height,
+                Text(controller.productDetaill.value.comments![index].body!,
+                    style: Theme.of(context).textTheme.displayMedium),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:watch_store_getx/feature/feature_basket/controller/basket_controller.dart';
 import 'package:watch_store_getx/feature/feature_basket/screen/basket_scren.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/home_screen.dart';
 import 'package:watch_store_getx/feature/feature_profile/screen/profile_screen.dart';
@@ -23,11 +24,11 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
         body: SafeArea(
             child: Obx(
-              ()=> IndexedStack(
-                        index: currentIndex.value,
-                        children: [HomeScreen(),BasketScreen(),ProfileScreen()],
-                      ),
-            )),
+          () => IndexedStack(
+            index: currentIndex.value,
+            children: [HomeScreen(), BasketScreen(), const ProfileScreen()],
+          ),
+        )),
         bottomNavigationBar: Obx(
           () => BottomNavigationBar(
             onTap: (value) {
@@ -46,9 +47,57 @@ class MainScreen extends StatelessWidget {
                   icon: SvgPicture.asset(Assets.svg.home, color: Colors.grey)),
               BottomNavigationBarItem(
                   activeIcon:
-                      SvgPicture.asset(Assets.svg.basket, color: Colors.black),
+                  Stack(
+                    children: [
+                      SvgPicture.asset(Assets.svg.basket,color: Colors.black),
+                      Visibility(
+                        visible:
+                        Get.find<BasketController>().basketList.isNotEmpty,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.red),
+                          child: Center(
+                            child: Text(
+                              Get.find<BasketController>()
+                                  .basketList
+                                  .length
+                                  .toString(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   label: "سبدخرید",
-                  icon: SvgPicture.asset(Assets.svg.basket)),
+                  icon: Obx(
+                      ()=> Stack(
+                      children: [
+                        SvgPicture.asset(Assets.svg.basket),
+                        Visibility(
+                          visible:
+                              Get.find<BasketController>().basketList.isNotEmpty,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.red),
+                            child: Center(
+                              child: Text(
+                                Get.find<BasketController>()
+                                    .basketList
+                                    .length
+                                    .toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
               BottomNavigationBarItem(
                   activeIcon:
                       SvgPicture.asset(Assets.svg.user, color: Colors.black),

@@ -9,4 +9,5 @@ class NamedClass{
   static String basketScreen='/basketScreen';
   static String profileScreen='/profileScreen';
   static String singleProductDetail='/singleProductDetail';
+  static String productListScreen='/productListScreen';
 }

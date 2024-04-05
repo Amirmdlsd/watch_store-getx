@@ -5,6 +5,7 @@ import 'package:watch_store_getx/feature/feature_basket/screen/basket_scren.dart
 import 'package:watch_store_getx/feature/feature_home/screen/home_screen.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/main_screen.dart';
 import 'package:watch_store_getx/feature/feature_product_detail/screen/single_detail_product_screen.dart';
+import 'package:watch_store_getx/feature/feature_product_list/screen/product_list_screen.dart';
 import 'package:watch_store_getx/route/named_class.dart';
 
 List<GetPage<dynamic>> getPage = [
@@ -16,4 +17,5 @@ List<GetPage<dynamic>> getPage = [
       name: NamedClass.singleProductDetail,
       page: () => SingleProductDetailScreen()),
   GetPage(name: NamedClass.basketScreen, page: () => BasketScreen()),
+  GetPage(name: NamedClass.productListScreen, page: () => ProductListScreen()),
 ];

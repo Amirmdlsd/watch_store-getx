@@ -15,20 +15,20 @@ class BasketController extends GetxController {
 
   Future<void> addToBasket(int id) async {
     try {
-      loadingForCount.value = true;
+      loading.value = true;
       var response = await DioProvider()
           .postMethod({'product_id': id}, EndPoints.addToBasketasketEndPoint);
-      loadingForCount.value = false;
+      loading.value = false;
       CustomSnackBar.showSnackBar(response.data['message']);
       getAllBasketItem();
     } on DioException catch (e) {
-      loadingForCount.value = false;
+      loading.value = false;
 
       CustomSnackBar.showSnackBar(e.response?.data['message']);
 
       throw Exception(e.response?.data['message']);
     } catch (e) {
-      loadingForCount.value = false;
+      loading.value = false;
 
       CustomSnackBar.showSnackBar('خطایی ره داده است');
       throw Exception(e.toString());
@@ -37,10 +37,10 @@ class BasketController extends GetxController {
 
   Future<void> getAllBasketItem() async {
     try {
-      // loadingForItem.value = true;
+      loadingForItem.value = true;
 
       var response =
-          await DioProvider().postMethod({}, EndPoints.basketasketEndPoint);
+      await DioProvider().postMethod({}, EndPoints.basketasketEndPoint);
       RxList<BasketModel> basket = RxList();
 
       if (response.statusCode == 200) {
@@ -52,13 +52,13 @@ class BasketController extends GetxController {
       basketList.assignAll(basket);
       loadingForItem.value = false;
     } on DioException catch (e) {
-      // loadingForItem.value = false;
+      loadingForItem.value = false;
 
       CustomSnackBar.showSnackBar(e.response?.data['message']);
 
       throw Exception(e.response?.data['message']);
     } catch (e) {
-      // loadingForItem.value = false;
+      loadingForItem.value = false;
       CustomSnackBar.showSnackBar('خطایی رخ داده است');
       throw Exception(e.toString());
     }
@@ -68,8 +68,7 @@ class BasketController extends GetxController {
     try {
       var response = await DioProvider()
           .postMethod({'product_id': id}, EndPoints.basketasketRemoveEndPoint);
-      CustomSnackBar.showSnackBar(response.data['message']);
-      getAllBasketItem();
+      getBasketAgain();
     } on DioException catch (e) {
       CustomSnackBar.showSnackBar(e.response?.data['message']);
 
@@ -86,17 +85,55 @@ class BasketController extends GetxController {
       var response = await DioProvider()
           .postMethod({'product_id': id}, EndPoints.basketasketDeleteEndPoint);
       loadingForCount.value = false;
-      CustomSnackBar.showSnackBar(response.data['message']);
-      getAllBasketItem();
+      getBasketAgain();
     } on DioException catch (e) {
       loadingForCount.value = false;
 
-      CustomSnackBar.showSnackBar(e.response?.data['message']);
 
       throw Exception(e.response?.data['message']);
     } catch (e) {
       loadingForCount.value = false;
 
+      CustomSnackBar.showSnackBar('خطایی ره داده است');
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> getBasketAgain()async {
+    try {
+      var response =
+          await DioProvider().postMethod({}, EndPoints.basketasketEndPoint);
+      RxList<BasketModel> basket = RxList();
+
+      if (response.statusCode == 200) {
+        debugPrint(response.data['data']['user_cart'].toString());
+        response.data['data']['user_cart'].forEach((json) {
+          basket.add(BasketModel.fromJson(json));
+        });
+      }
+      basketList.assignAll(basket);
+      loadingForItem.value = false;
+    } on DioException catch (e) {
+      CustomSnackBar.showSnackBar(e.response?.data['message']);
+
+      throw Exception(e.response?.data['message']);
+    } catch (e) {
+      CustomSnackBar.showSnackBar('خطایی رخ داده است');
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> addToCounter(int id) async{
+    try {
+      var response = await DioProvider()
+          .postMethod({'product_id': id}, EndPoints.addToBasketasketEndPoint);
+      loadingForCount.value = false;
+      getBasketAgain();
+    } on DioException catch (e) {
+      CustomSnackBar.showSnackBar(e.response?.data['message']);
+
+      throw Exception(e.response?.data['message']);
+    } catch (e) {
       CustomSnackBar.showSnackBar('خطایی ره داده است');
       throw Exception(e.toString());
     }

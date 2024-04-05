@@ -15,7 +15,7 @@ class DiscountContainerWidget extends StatelessWidget {
     var size = MediaQuery.of(context).size;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: size.height * .02),
+      padding: EdgeInsets.symmetric(horizontal: size.height * .01),
       height: size.height * .03,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppDimens.medium),

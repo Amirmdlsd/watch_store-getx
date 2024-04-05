@@ -88,7 +88,7 @@ class BasketItem extends StatelessWidget {
                           onTap: () {
                             basket.isLoading.value = true;
                             debugPrint(basket.id.toString());
-                            basketController.addToBasket(basket.productId);
+                            basketController.addToCounter(basket.productId);
                           },
                           icon: Assets.svg.plus),
                       AppDimens.medium.width,

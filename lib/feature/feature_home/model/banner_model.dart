@@ -1,11 +1,11 @@
-class BannerModel {
+class BrandModel {
   int id;
   String title;
   String image;
 
-  BannerModel(this.id, this.title, this.image);
-  factory BannerModel.fromJson(Map<String, dynamic> json) {
-    return BannerModel(
+  BrandModel(this.id, this.title, this.image);
+  factory BrandModel.fromJson(Map<String, dynamic> json) {
+    return BrandModel(
       json['id'],
       json['title'],
       json['image']

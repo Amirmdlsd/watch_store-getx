@@ -5,6 +5,7 @@ import 'package:watch_store_getx/feature/feature_authentication/screen/send_sms_
 import 'package:watch_store_getx/feature/feature_basket/screen/basket_scren.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/home_screen.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/main_screen.dart';
+import 'package:watch_store_getx/feature/feature_product_list/screen/product_list_screen.dart';
 import 'package:watch_store_getx/route/route.dart';
 
 void main()async {

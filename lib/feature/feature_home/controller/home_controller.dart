@@ -12,7 +12,7 @@ import '../model/category_model.dart';
 import '../model/product_model.dart';
 
 class HomeController extends GetxController {
-  RxList<BannerModel> bannerList = RxList();
+  RxList<BrandModel> bannerList = RxList();
   RxList<CategoryModel> categroyList = RxList();
   RxList<ProductModel> amazingProduct = RxList();
   RxList<ProductModel> mostSellPoduct = RxList();
@@ -27,7 +27,7 @@ class HomeController extends GetxController {
 
       if (response.statusCode == 200) {
         response.data['data']['sliders'].forEach((element) {
-          bannerList.add(BannerModel.fromJson(element));
+          bannerList.add(BrandModel.fromJson(element));
         });
         response.data['data']['categories'].forEach((element) {
           categroyList.add(CategoryModel.fromJson(element));

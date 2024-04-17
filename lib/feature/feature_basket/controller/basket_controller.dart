@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:watch_store_getx/config/endpoint/endpoints.dart';
 import 'package:watch_store_getx/config/widget/custom_snackbar.dart';
 import 'package:watch_store_getx/feature/feature_basket/model/basket_model.dart';
+import 'package:watch_store_getx/feature/feature_basket/model/payment_model.dart';
+import 'package:watch_store_getx/feature/feature_basket/model/total_price_model.dart';
 import 'package:watch_store_getx/feature/utils/auth_manager.dart';
 import 'package:watch_store_getx/feature/utils/dio_provider.dart';
 
@@ -12,6 +15,8 @@ class BasketController extends GetxController {
   RxBool loadingForCount = false.obs;
   RxBool loadingForItem = false.obs;
   RxList<BasketModel> basketList = RxList();
+  Rx<TotalPriceModel> totalPrice = TotalPriceModel(0, 0).obs;
+  RxBool loadingForPayment = false.obs;
 
   Future<void> addToBasket(int id) async {
     try {
@@ -40,7 +45,7 @@ class BasketController extends GetxController {
       loadingForItem.value = true;
 
       var response =
-      await DioProvider().postMethod({}, EndPoints.basketasketEndPoint);
+          await DioProvider().postMethod({}, EndPoints.basketasketEndPoint);
       RxList<BasketModel> basket = RxList();
 
       if (response.statusCode == 200) {
@@ -48,6 +53,8 @@ class BasketController extends GetxController {
         response.data['data']['user_cart'].forEach((json) {
           basket.add(BasketModel.fromJson(json));
         });
+        debugPrint(response.data['data'].toString());
+        totalPrice.value = TotalPriceModel.fromJson(response.data['data']);
       }
       basketList.assignAll(basket);
       loadingForItem.value = false;
@@ -89,7 +96,6 @@ class BasketController extends GetxController {
     } on DioException catch (e) {
       loadingForCount.value = false;
 
-
       throw Exception(e.response?.data['message']);
     } catch (e) {
       loadingForCount.value = false;
@@ -99,7 +105,7 @@ class BasketController extends GetxController {
     }
   }
 
-  Future<void> getBasketAgain()async {
+  Future<void> getBasketAgain() async {
     try {
       var response =
           await DioProvider().postMethod({}, EndPoints.basketasketEndPoint);
@@ -110,6 +116,7 @@ class BasketController extends GetxController {
         response.data['data']['user_cart'].forEach((json) {
           basket.add(BasketModel.fromJson(json));
         });
+        totalPrice.value = TotalPriceModel.fromJson(response.data['data']);
       }
       basketList.assignAll(basket);
       loadingForItem.value = false;
@@ -123,7 +130,7 @@ class BasketController extends GetxController {
     }
   }
 
-  Future<void> addToCounter(int id) async{
+  Future<void> addToCounter(int id) async {
     try {
       var response = await DioProvider()
           .postMethod({'product_id': id}, EndPoints.addToBasketasketEndPoint);
@@ -139,6 +146,23 @@ class BasketController extends GetxController {
     }
   }
 
+  Future<void> payment() async {
+    try {
+      loadingForPayment.value = true;
+      var response = await DioProvider().postMethod({}, EndPoints.payment);
+      loadingForPayment.value = false;
+      var url = Uri.parse(response.data['action']);
+      await launchUrl(url);
+      await getBasketAgain();
+    } on DioException catch (e) {
+      loadingForPayment.value = false;
+      throw Exception(e.response?.data['message']);
+    } catch (e) {
+      loadingForPayment.value = false;
+
+      throw Exception(e.toString());
+    }
+  }
 
   @override
   void onInit() {

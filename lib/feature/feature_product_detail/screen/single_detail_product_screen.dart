@@ -194,7 +194,7 @@ class ProductDetailPriceContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-        ()=> Container(
+      () => Container(
         padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * .01),
         width: double.infinity,
         height: MediaQuery.of(context).size.height * .1,
@@ -269,10 +269,14 @@ class CommentListView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(controller.productDetaill.value.comments![index].user!,
+                Text(
+                    controller.productDetaill.value.comments![index].user ??
+                        'نامشخص',
                     style: Theme.of(context).textTheme.displayMedium),
                 AppDimens.medium.height,
-                Text(controller.productDetaill.value.comments![index].body!,
+                Text(
+                    controller.productDetaill.value.comments![index].body ??
+                        'نامشخص',
                     style: Theme.of(context).textTheme.displayMedium),
               ],
             ),

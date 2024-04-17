@@ -19,4 +19,6 @@ class EndPoints {
   static const String cheapestProductEndPoint = "${EndPoints.mainEndPoint}public/api/v1/newest_products";
   static const String mostExpensiveProductEndPoint = "${EndPoints.mainEndPoint}public/api/v1/most_expensive_products";
   static const String mostViewedProductEndPoint = "${EndPoints.mainEndPoint}public/api/v1/most_viewed_products";
+  static const String payment = "${EndPoints.mainEndPoint}public/api/v1/payment";
+  static const String search = "${EndPoints.mainEndPoint}/api/v1/all_products/";
 }

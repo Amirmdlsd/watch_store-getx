@@ -26,7 +26,7 @@ class MainScreen extends StatelessWidget {
             child: Obx(
           () => IndexedStack(
             index: currentIndex.value,
-            children: [HomeScreen(), BasketScreen(), const ProfileScreen()],
+            children: [HomeScreen(), BasketScreen(),  ProfileScreen()],
           ),
         )),
         bottomNavigationBar: Obx(

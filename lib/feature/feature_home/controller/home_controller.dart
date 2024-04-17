@@ -18,12 +18,12 @@ class HomeController extends GetxController {
   RxList<ProductModel> mostSellPoduct = RxList();
   RxList<ProductModel> newsetPoduct = RxList();
   RxBool isLoading = false.obs;
+  RxList<ProductModel> searchproduct = RxList();
 
   Future<dynamic> getHomeData() async {
     try {
       isLoading.value = true;
-      var response = await DioProvider().getMethod(
-          EndPoints.homeEndPoint);
+      var response = await DioProvider().getMethod(EndPoints.homeEndPoint);
 
       if (response.statusCode == 200) {
         response.data['data']['sliders'].forEach((element) {
@@ -58,6 +58,22 @@ class HomeController extends GetxController {
               })
         ],
       );
+    }
+  }
+
+  Future<void> search(String search) async {
+    try {
+      var response = await DioProvider().getMethod(EndPoints.search + search);
+      RxList<ProductModel> searchList = RxList();
+
+      response.data['all_products']['data'].forEach((json) {
+        searchList.add(ProductModel.fromMapJson(json));
+      });
+      searchproduct.assignAll(searchList);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message']);
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 

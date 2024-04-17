@@ -6,6 +6,7 @@ import 'package:watch_store_getx/feature/feature_basket/screen/basket_scren.dart
 import 'package:watch_store_getx/feature/feature_home/screen/home_screen.dart';
 import 'package:watch_store_getx/feature/feature_home/screen/main_screen.dart';
 import 'package:watch_store_getx/feature/feature_product_list/screen/product_list_screen.dart';
+import 'package:watch_store_getx/route/named_class.dart';
 import 'package:watch_store_getx/route/route.dart';
 
 void main()async {
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
                 decorationThickness: 2,
                 color: Colors.grey)),
       ),
-      home: MainScreen(),
+      // home: MainScreen(),
+initialRoute: NamedClass.root,
     );
   }
 }

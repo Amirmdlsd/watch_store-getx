@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:watch_store_getx/config/constant/color.dart';
 import 'package:watch_store_getx/config/constant/dimens.dart';
@@ -132,8 +130,7 @@ class BasketIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: SvgPicture.asset(icon,
-          width: MediaQuery.of(context).size.width * .07),
+      child: SvgPicture.asset(icon, width: 32),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:watch_store_getx/config/endpoint/endpoints.dart';
 import 'package:watch_store_getx/config/widget/custom_snackbar.dart';
@@ -9,6 +10,7 @@ import 'package:watch_store_getx/feature/feature_basket/model/payment_model.dart
 import 'package:watch_store_getx/feature/feature_basket/model/total_price_model.dart';
 import 'package:watch_store_getx/feature/utils/auth_manager.dart';
 import 'package:watch_store_getx/feature/utils/dio_provider.dart';
+import 'package:zarinpal/zarinpal.dart';
 
 class BasketController extends GetxController {
   RxBool loading = false.obs;
@@ -153,7 +155,9 @@ class BasketController extends GetxController {
       loadingForPayment.value = false;
       var url = Uri.parse(response.data['action']);
       await launchUrl(url);
-      await getBasketAgain();
+      linkStream.listen((deeplink) {
+        if (deeplink!.toLowerCase().contains('authority')) {}
+      });
     } on DioException catch (e) {
       loadingForPayment.value = false;
       throw Exception(e.response?.data['message']);
@@ -164,10 +168,14 @@ class BasketController extends GetxController {
     }
   }
 
+  // final _paymentRequest = PaymentRequest();
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     getAllBasketItem();
+    // _paymentRequest.
+    // setCallbackURL('store://watch');
   }
 }

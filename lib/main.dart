@@ -9,6 +9,8 @@ import 'package:watch_store_getx/feature/feature_product_list/screen/product_lis
 import 'package:watch_store_getx/route/named_class.dart';
 import 'package:watch_store_getx/route/route.dart';
 
+import 'feature/feature_authentication/screen/my_map_view.dart';
+
 void main()async {
  await GetStorage.init();
   runApp(const MyApp());
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: MainScreen(),
 initialRoute: NamedClass.root,
+//     home: MyMapView(),
     );
   }
 }

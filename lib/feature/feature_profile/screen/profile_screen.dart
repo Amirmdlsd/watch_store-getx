@@ -68,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.displayMedium),
                         AppDimens.medium.height,
                         SizedBox(
-                          height: height * .3,
+                          height: height * .2,
                           width: double.infinity,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,11 +100,12 @@ class ProfileScreen extends StatelessWidget {
                                         Get.offAndToNamed(
                                             NamedClass.sendSmsScreen);
                                         var user = Get.find<AuthController>();
-                                        user.mobileController.text ='';
-                                        user.verificationCodeContoller.text ='';
-                                        user.postalCodeContoller.text ='';
-                                        user.addressContoller.text ='';
-                                        user.phoneContoller.text ='';
+                                        user.mobileController.text = '';
+                                        user.verificationCodeContoller.text =
+                                            '';
+                                        user.postalCodeContoller.text = '';
+                                        user.addressContoller.text = '';
+                                        user.phoneContoller.text = '';
                                       },
                                       child: Text("خروج از حساب",
                                           style: Theme.of(context)
@@ -118,6 +119,76 @@ class ProfileScreen extends StatelessWidget {
                         )
                       ],
                     )),
+                  ),
+                  // rules
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                        bottom: height * .03,
+                        right: width * .06,
+                        left: width * .06),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppDimens.medium),
+                          color: Colors.grey.shade200,
+                        ),
+                        height: height * .08,
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(AppStrings.termOfService,
+                                style:
+                                    Theme.of(context).textTheme.displayMedium)),
+                      ),
+                    ),
+                  ),
+                  //  product status
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: width * .06),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppDimens.medium),
+                          color: Colors.grey.shade200,
+                        ),
+                        height: height * .13,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ProductStatusWidget(
+                                count: '0',
+                                image: Assets.svg.inProccess,
+                                title: AppStrings.inProccess),
+                            ProductStatusWidget(
+                                count: '0',
+                                image: Assets.svg.cancelled,
+                                title: AppStrings.cancelled),
+                            ProductStatusWidget(
+                                count: '0',
+                                image: Assets.svg.delivered,
+                                title: AppStrings.delivered),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+
+                  // banner image
+                  ,
+                  SliverPadding(
+                    padding:
+                        EdgeInsets.only(left: width * .06, right: width * .06),
+                    sliver: SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: height * .2,
+                        child: Image.asset(
+                          Assets.png.mainLogo.path,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -151,6 +222,31 @@ class UserItem extends StatelessWidget {
                 .textTheme
                 .displayMedium!
                 .copyWith(fontSize: 16)),
+      ],
+    );
+  }
+}
+
+class ProductStatusWidget extends StatelessWidget {
+  const ProductStatusWidget(
+      {super.key,
+      required this.image,
+      required this.title,
+      required this.count});
+  final String image;
+  final String title;
+  final String count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset(image),
+        AppDimens.small.height,
+        Text(count, style: Theme.of(context).textTheme.displayMedium),
+        AppDimens.small.height,
+        Text(title, style: Theme.of(context).textTheme.displayMedium),
       ],
     );
   }

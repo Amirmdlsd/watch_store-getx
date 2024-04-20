@@ -10,7 +10,9 @@ import '../../../route/named_class.dart';
 import '../model/product_detail_model.dart';
 
 class ProductDetailController extends GetxController {
+  final TextEditingController commentController = TextEditingController();
   RxBool loading = false.obs;
+  RxBool loadingForSendComment = false.obs;
   Rx<ProductDetailesModel> productDetaill = ProductDetailesModel().obs;
 
   Future<ProductDetailesModel> getProductDetail(int id) async {
@@ -31,6 +33,25 @@ class ProductDetailController extends GetxController {
       CustomSnackBar.showSnackBar(e.response?.data['message']);
       throw Exception(e.response?.data['message']);
     } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> sendComment(int id) async {
+    try {
+      loadingForSendComment.value = true;
+      var response = await DioProvider().postMethod(
+          {'body': commentController.text, 'product_id': id},
+          EndPoints.sendCommentEndPoint);
+      getProductDetail(id);
+      loadingForSendComment.value = false;
+    } on DioException catch (e) {
+      loadingForSendComment.value = false;
+
+      throw Exception(e.response?.data['message']);
+    } catch (e) {
+      loadingForSendComment.value = false;
+
       throw Exception(e.toString());
     }
   }

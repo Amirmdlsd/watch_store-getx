@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -10,6 +9,7 @@ import 'package:watch_store_getx/config/extension/sized_box_extension.dart';
 import 'package:watch_store_getx/config/widget/cached_image.dart';
 import 'package:watch_store_getx/config/widget/loading_widget.dart';
 import 'package:watch_store_getx/config/widget/main_button.dart';
+import 'package:watch_store_getx/config/widget/main_input_widget.dart';
 import 'package:watch_store_getx/feature/feature_basket/controller/basket_controller.dart';
 import 'package:watch_store_getx/feature/feature_product_detail/controller/product_detail_controller.dart';
 
@@ -145,18 +145,99 @@ class _SingleProductDetailScreenState extends State<SingleProductDetailScreen>
                             )),
                             //comments
                             controller.productDetaill.value.comments!.isEmpty
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                ? Stack(
                                     children: [
-                                      const Icon(
-                                          Icons.comments_disabled_outlined,
-                                          size: 50),
-                                      AppDimens.medium.height,
-                                      const Text(
-                                        'هیچ کامنتی برای محصول وجودندارد',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 18),
-                                      )
+                                      Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                                Icons
+                                                    .comments_disabled_outlined,
+                                                size: 50),
+                                            AppDimens.medium.height,
+                                            const Text(
+                                              'هیچ کامنتی برای محصول وجودندارد',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                          top: 10,
+                                          left: 10,
+                                          child: controller
+                                                  .loadingForSendComment.value
+                                              ? const SizedBox(
+                                                  height: 30,
+                                                  width: 30,
+                                                  child:
+                                                      CircularProgressIndicator())
+                                              : SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      .5,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      .04,
+                                                  child: MainElevatedButton(
+                                                    lable: 'ارسال کامنت',
+                                                    onTap: () {
+                                                      Get.defaultDialog(
+                                                          onConfirm: () async {
+                                                            if (controller
+                                                                .commentController
+                                                                .text
+                                                                .isNotEmpty) {
+                                                              Get.back();
+                                                              await controller
+                                                                  .sendComment(
+                                                                      controller
+                                                                          .productDetaill
+                                                                          .value
+                                                                          .id!);
+                                                              controller
+                                                                  .commentController
+                                                                  .text = '';
+                                                            } else {
+                                                              return;
+                                                            }
+                                                          },
+                                                          title: "",
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                          radius: 50,
+                                                          textCancel: 'لغو',
+                                                          textConfirm: 'ارسال',
+                                                          content: SizedBox(
+                                                            height: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                .12,
+                                                            child: MainInputWidget(
+                                                                showTimer:
+                                                                    false,
+                                                                time: 0.obs,
+                                                                lable:
+                                                                    "لطفا کامنت خود را بنویسید",
+                                                                hintText:
+                                                                    '......',
+                                                                textInputType:
+                                                                    TextInputType
+                                                                        .text,
+                                                                controller:
+                                                                    controller
+                                                                        .commentController),
+                                                          ));
+                                                    },
+                                                  ),
+                                                ))
                                     ],
                                   )
                                 : CommentListView(controller: controller)
@@ -257,31 +338,85 @@ class CommentListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: controller.productDetaill.value.comments!.length,
-      itemBuilder: (context, index) => Container(
-        margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Image.asset(Assets.png.avatar.path),
-            AppDimens.medium.width,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                    controller.productDetaill.value.comments![index].user ??
-                        'نامشخص',
-                    style: Theme.of(context).textTheme.displayMedium),
-                AppDimens.medium.height,
-                Text(
-                    controller.productDetaill.value.comments![index].body ??
-                        'نامشخص',
-                    style: Theme.of(context).textTheme.displayMedium),
-              ],
+    return Obx(
+      () => Stack(
+        children: [
+          ListView.builder(
+            itemCount: controller.productDetaill.value.comments!.length,
+            itemBuilder: (context, index) => Container(
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  Image.asset(Assets.png.avatar.path),
+                  AppDimens.medium.width,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          controller
+                                  .productDetaill.value.comments![index].user ??
+                              'نامشخص',
+                          style: Theme.of(context).textTheme.displayMedium),
+                      AppDimens.medium.height,
+                      Text(
+                          controller
+                                  .productDetaill.value.comments![index].body ??
+                              'نامشخص',
+                          style: Theme.of(context).textTheme.displayMedium),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+              top: 10,
+              left: 10,
+              child: controller.loadingForSendComment.value
+                  ? const SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(),
+                    )
+                  : SizedBox(
+                      width: MediaQuery.of(context).size.width * .5,
+                      height: MediaQuery.of(context).size.height * .04,
+                      child: MainElevatedButton(
+                        lable: 'ارسال کامنت',
+                        onTap: () {
+                          Get.defaultDialog(
+                              onConfirm: () async {
+                                if (controller
+                                    .commentController.text.isNotEmpty) {
+                                  Get.back();
+                                  await controller.sendComment(
+                                      controller.productDetaill.value.id!);
+                                  controller.commentController.text = '';
+                                } else {
+                                  return;
+                                }
+                              },
+                              title: "",
+                              backgroundColor: Colors.white,
+                              radius: 50,
+                              textCancel: 'لغو',
+                              textConfirm: 'ارسال',
+                              content: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * .12,
+                                child: MainInputWidget(
+                                    showTimer: false,
+                                    time: 0.obs,
+                                    lable: "لطفا کامنت خود را بنویسید",
+                                    hintText: '......',
+                                    textInputType: TextInputType.text,
+                                    controller: controller.commentController),
+                              ));
+                        },
+                      ),
+                    ))
+        ],
       ),
     );
   }
